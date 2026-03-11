@@ -1,12 +1,18 @@
 const wordBank = ['soft', 'cone', 'melt', 'cool', 'cake', 'milk', 'mint', 'cold', 'dish', 'bean'];
 
-let currentWord;
+let randomWord;
 let guessedLetter = [];
 let attempts = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
-
     startGame();
+
+    document.getElementById("guessButton").addEventListener("click", submitGuess);
+    document.getElementById("guessedInput").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            submitGuess();
+        }
+    });
 });
 
 function startGame() {
@@ -14,14 +20,52 @@ function startGame() {
     randomWord = wordBank[randomIndex]
     guessedLetter = [];
     attempts = 0;
-    console.log("currentWord")
+
+    displayWord(); 
+    console.log(randomWord)
+
+    document.getElementById("guessedLettersDisplay").textContent = "Guessed Letters: ";
+    document.getElementById("wrongLettersDisplay").textContent = "Wrong Letters: ";
+    document.getElementById("message").textContent = "";
 }
 
 function displayWord() {
     let display = "";
-    for (let i = 0; i < wordBank.length, i++) {
-        let letter = word.charAt(i);
+    for (let i = 0; i < randomWord.length; i++) {
+        let letter = randomWord.charAt(i);
+
+        if(guessedLetter.includes(letter)) {
+            display += letter + " ";
+        } else {
+            display += "_ ";
+        }
     }
+
+    document.getElementById("wordDisplay").textContent = display;
+}
+
+function guessLetter(letter) {
+
+    if (!guessedLetter.includes(letter)) {
+        guessedLetter.push(letter);
+    }
+
+    if (!randomWord.includes(letter)) {
+        attempts++;
+        document.getElementById("message").textContent = "Wrong!";
+    } else {
+        document.getElementById("message").textContent = "Correct!";
+    }
+
+    displayWord();
+
+    document.getElementById("guessedLettersDisplay").textContent = "Guessed Letters: " + guessedLetter.join(" ");
+    document.getElementById("wrongLettersDisplay").textContent = "Guesses Left: " + (4 - attempts);
+}
+
+function submitGuess() {
+    let input = document.getElementById("guessInput").value.toLowerCase();
+
 }
 
 
