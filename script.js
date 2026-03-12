@@ -15,6 +15,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+const guessInput = document.getElementById("guessInput");
+/* keeps letters only A-Z & forces uppercase */ 
+guessInput.addEventListener("input", (e) => {
+  e.target.value = e.target.value.replace(/[^a-zA-Z]/g, "").toUpperCase();
+});
+
 function startGame() {
     const randomIndex = Math.floor(Math.random() * wordBank.length);
     randomWord = wordBank[randomIndex]
@@ -61,11 +67,14 @@ function guessLetter(letter) {
 
     document.getElementById("guessedLettersDisplay").textContent = "Guessed Letters: " + guessedLetter.join(" ");
     document.getElementById("wrongLettersDisplay").textContent = "Guesses Left: " + (4 - attempts);
+
 }
 
-function submitGuess() {
-    let input = document.getElementById("guessInput").value.toLowerCase();
-
+function guessButton() {
+    var guessInput = document.getElementById('guessInput');
+    var userGuess = guessInput.value;
+    guessInput.value = '';
+    guessInput.focus();
 }
 
 
