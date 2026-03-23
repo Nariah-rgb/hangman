@@ -51,7 +51,7 @@ body {
   position: relative;
   display: inline-block;
   outline: none;
-  border: 2px solid #c4db14;
+  border: 2px solid #98aa0d;
   background: #E4FF1A;
   font-family: "manteiga-gorda", sans-serif;
     font-weight: 400;
@@ -144,7 +144,15 @@ hr {
     text-shadow: 2px 2px 4px #000;
 }
 
-#wrongGuessDisplay {
+#message {
+  font-family: "manteiga-gorda", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: white;
+    text-shadow: 2px 2px 4px #000;
+}
+
+#wrongLettersDisplay {
   font-family: "manteiga-gorda", sans-serif;
     font-weight: 400;
     font-style: normal;
