@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     guessInput = document.getElementById("guessInput");
     startGame();
 
+    document.getElementById("restartButton").addEventListener("click", restartGame);
     document.getElementById("guessButton").addEventListener("click", submitGuess);
     document.getElementById("guessInput").addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
@@ -73,6 +74,8 @@ function submitGuess() {
 
 function guessLetter(letter) {
 
+    if (!gameStarted) return;
+
     if (guessedLetter.includes(letter)) {
         document.getElementById("message").textContent = "Already guessed";
         return;
@@ -82,10 +85,12 @@ function guessLetter(letter) {
 
     if (randomWord.includes(letter)) {
         document.getElementById("message").textContent = "Correct!";
+        message.style.color = "#56E39F";
     } else {
         attempts++;
         wrongLetters.push(letter);
         document.getElementById("message").textContent = "Wrong!";
+        message.style.color = "#E71D36";
         updateHealthImage();
     }
 
@@ -94,27 +99,15 @@ function guessLetter(letter) {
     document.getElementById("guessedLettersDisplay").textContent = "Guessed Letters: " + guessedLetter.join(" ");
     document.getElementById("wrongLettersDisplay").textContent = "Wrong Letters: " + wrongLetters.join(" ");
     document.getElementById("wrongGuessDisplay").textContent = "Guesses Left: " + (maxAttempts - attempts);
-
-    if (!document.getElementById("wordDisplay").textContent.includes("_")) {
-        document.getElementById("message").textContent = "You win!";
-        gameStarted = false;
-        toggleDifficultyButtons(false);
-        document.getElementById("guessInput").disabled = true;
-        document.getElementById("guessButton").disabled = true;
-    }
-
-    if (attempts >= maxAttempts) {
-        endGame(false);
-        document.getElementById("message").textContent = "You lose! The word was: " + randomWord;
-
-        gameStarted = false;
-        toggleDifficultyButtons(false);
-        document.getElementById("guessInput").disabled = true;
-        document.getElementById("guessButton").disabled = true;
-    }
-
+    
     if (checkWin()) {
         endGame(true);
+        return;
+    }
+
+     if (attempts >= maxAttempts) {
+        endGame(false);
+        return;
     }
 
 }
@@ -151,14 +144,24 @@ function endGame(won) {
     const message = document.getElementById("message");
     if (won) {
         message.textContent = "You win!";
-        message.style.color = "green";
+        message.style.color = "#56E39F";
     } else {
         message.textContent = "You lose! The word was: " + randomWord;
-        message.style.color = "red";
+        message.style.color = "#E71D36";
     }
 
     gameStarted = false;
     document.getElementById("guessInput").disabled = true;
     document.getElementById("guessButton").disabled = true;
     toggleDifficultyButtons(false);
+}
+
+function restartGame() {
+    startGame();
+    gameStarted= true;
+
+    document.getElementById("guessInput").disabled = false;
+    document.getElementById("guessButton").disabled = false;
+    toggleDifficultyButtons(true);
+
 }
