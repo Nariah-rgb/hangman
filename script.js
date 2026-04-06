@@ -5,7 +5,7 @@ let guessedLetter = [];
 let wrongLetters = [];
 let attempts = 0;
 let maxAttempts = 0;
-let gameStarted = false;
+let gameStarted = false; /* if user selected difficulty */
 
 document.addEventListener("DOMContentLoaded", function () {
     guessInput = document.getElementById("guessInput");
@@ -23,24 +23,29 @@ document.addEventListener("DOMContentLoaded", function () {
         e.target.value = e.target.value.replace(/[^a-zA-Z]/g, "").toUpperCase();
     });
 
+    /* difficulty buttons with set number of guesses */
     document.querySelector(" .easy").addEventListener("click", () => setDifficulty(4));
     document.querySelector(" .med").addEventListener("click", () => setDifficulty(3));
     document.querySelector(" .hard").addEventListener("click", () => setDifficulty(2));
 });
 
 function startGame() {
+    /* picks random word */
     const randomIndex = Math.floor(Math.random() * wordBank.length);
     randomWord = wordBank[randomIndex].toUpperCase();
+    /* resets game */
     guessedLetter = [];
     wrongLetters = [];
     attempts = 0;
 
     displayWord();
 
+    /* resets display */
     document.getElementById("guessedLettersDisplay").textContent = "Guessed Letters: ";
     document.getElementById("wrongLettersDisplay").textContent = "Wrong Letters: ";
     document.getElementById("message").textContent = "";
 
+    /* resets image */
     document.getElementById("healthImage").src = "ice0.png";
 }
 
@@ -49,6 +54,7 @@ function displayWord() {
     for (let i = 0; i < randomWord.length; i++) {
         let letter = randomWord.charAt(i);
 
+        /* pick difficulty before guessing */
         if (guessedLetter.includes(letter)) {
             display += letter + " ";
         } else {
@@ -66,6 +72,7 @@ function submitGuess() {
     }
 
     let letter = guessInput.value.toUpperCase();
+    /* empty imput doesn't work */
     if (!letter) return;
     guessInput.value = "";
     guessLetter(letter);
@@ -76,6 +83,7 @@ function guessLetter(letter) {
 
     if (!gameStarted) return;
 
+    /* prevents duplicated guesses */
     if (guessedLetter.includes(letter)) {
         document.getElementById("message").textContent = "Already guessed";
         return;
@@ -122,9 +130,12 @@ function setDifficulty(value) {
     gameStarted = true;
     document.getElementById("guessInput").disabled = false;
     document.getElementById("guessButton").disabled = false;
+    /* disables difficulty buttons after chosen */
     toggleDifficultyButtons(true);
+    /* starts new game */
     startGame();
 }
+
 function toggleDifficultyButtons(disabled) {
     document.querySelector(".easy").disabled = disabled
     document.querySelector(".med").disabled = disabled
@@ -151,15 +162,18 @@ function endGame(won) {
     }
 
     gameStarted = false;
+    /* disabled input box after game ended */
     document.getElementById("guessInput").disabled = true;
     document.getElementById("guessButton").disabled = true;
+    /* enables difficulty buttons */
     toggleDifficultyButtons(false);
 }
-
+    /* restarts the game with same difficulty */
 function restartGame() {
     startGame();
     gameStarted= true;
 
+    /* enables input box and submit button */
     document.getElementById("guessInput").disabled = false;
     document.getElementById("guessButton").disabled = false;
     toggleDifficultyButtons(true);
